@@ -13,6 +13,7 @@ describe('storage reducer - redirect rules', () => {
     }
     const action = addedRedirectRule({
       appName: 'Safari',
+      id: 'rule-test-123',
       pattern: '*github.com*',
     })
     const nextState = storage(initialState, action)
@@ -20,7 +21,7 @@ describe('storage reducer - redirect rules', () => {
     expect(nextState.rules).toHaveLength(1)
     expect(nextState.rules[0].pattern).toBe('*github.com*')
     expect(nextState.rules[0].appName).toBe('Safari')
-    expect(nextState.rules[0].id).toBeDefined()
+    expect(nextState.rules[0].id).toBe('rule-test-123')
   })
 
   it('should remove a redirect rule by id', () => {

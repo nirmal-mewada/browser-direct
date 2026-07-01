@@ -126,7 +126,7 @@ const storage = createReducer<Storage>(defaultStorage, (builder) =>
     .addCase(addedRedirectRule, (state, action) => {
       state.rules.push({
         appName: action.payload.appName,
-        id: Date.now().toString() + Math.random().toString(36).slice(2, 11),
+        id: action.payload.id,
         pattern: action.payload.pattern,
       })
     })

@@ -28,7 +28,7 @@ const reorderedApp = prefs<{ sourceName: AppName; destinationName: AppName }>(
 const clickedHomepageButton = prefs('homepage-button/clicked')
 const clickedOpenIssueButton = prefs('open-issue-button/clicked')
 
-const addedRedirectRule = prefs<{ pattern: string; appName: AppName }>(
+const addedRedirectRule = prefs<{ appName: AppName; id: string; pattern: string }>(
   'redirects/added',
 )
 const removedRedirectRule = prefs<{ id: string }>('redirects/removed')
