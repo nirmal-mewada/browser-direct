@@ -43,9 +43,18 @@ jobs:
           PRODUCT_NAME=$(node -p "require('./package.json').productName")
           mkdir -p out/dmg
           for ARCH in x64 arm64; do
+            APP="out/$PRODUCT_NAME-darwin-$ARCH/$PRODUCT_NAME.app"
+            # electron-packager copies/modifies the bundle (icon, Info.plist,
+            # resources) after Electron's prebuilt binary was linker-signed,
+            # which invalidates that signature's resource seal. Without
+            # osxSign (skipped in CI, no Developer ID available), the stale
+            # signature ships as-is, and Gatekeeper reports the app as
+            # "damaged" on the first launch after download. Re-sign ad-hoc
+            # to reseal it consistently with the final bundle contents.
+            codesign --force --deep --sign - "$APP"
             STAGING="$(mktemp -d)/$ARCH"
             mkdir -p "$STAGING"
-            cp -R "out/$PRODUCT_NAME-darwin-$ARCH/$PRODUCT_NAME.app" "$STAGING/"
+            cp -R "$APP" "$STAGING/"
             ln -s /Applications "$STAGING/Applications"
             hdiutil create -volname "$PRODUCT_NAME" -srcfolder "$STAGING" -ov -format UDZO "out/dmg/$PRODUCT_NAME-$ARCH.dmg"
           done
