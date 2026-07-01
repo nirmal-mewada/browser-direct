@@ -3,8 +3,7 @@ import clsx from 'clsx'
 const Button: React.FC<React.ComponentPropsWithoutRef<'button'>> = ({
   className,
   disabled,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- type is hardcoded
-  type,
+  type = 'button',
   ...restProperties
 }) => {
   return (
@@ -26,7 +25,8 @@ const Button: React.FC<React.ComponentPropsWithoutRef<'button'>> = ({
         'border-t-[#DAD8D8] dark:border-t-[#6E6D73]',
       )}
       disabled={disabled}
-      type="button"
+      // eslint-disable-next-line react/button-has-type -- type is forwarded from props, defaulting to 'button'
+      type={type}
       {...restProperties}
     />
   )

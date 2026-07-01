@@ -25,8 +25,8 @@ const Right = ({ children }: RowProps): JSX.Element => (
 
 export const RedirectsPane = (): JSX.Element => {
   const dispatch = useDispatch()
-  const rules = useSelector((state) => state.storage.rules || [])
-  const apps = useSelector((state) => state.storage.apps || [])
+  const rules = useSelector((state) => state.storage.rules)
+  const apps = useSelector((state) => state.storage.apps)
 
   // Filter only installed apps
   const installedApps = apps.filter((app) => app.isInstalled)
@@ -36,7 +36,18 @@ export const RedirectsPane = (): JSX.Element => {
 
   const handleAddRule = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!pattern.trim() || !selectedApp) {
+    const trimmedPattern = pattern.trim()
+    if (!trimmedPattern || !selectedApp) {
+      return
+    }
+
+    // Validate duplicate patterns case-insensitively
+    const isDuplicate = rules.some(
+      (rule) => rule.pattern.toLowerCase() === trimmedPattern.toLowerCase(),
+    )
+    if (isDuplicate) {
+      // eslint-disable-next-line no-alert
+      alert('A redirect rule for this pattern already exists.')
       return
     }
 
@@ -44,7 +55,7 @@ export const RedirectsPane = (): JSX.Element => {
       addedRedirectRule({
         appName: selectedApp,
         id: Date.now().toString() + Math.random().toString(36).slice(2, 11),
-        pattern: pattern.trim(),
+        pattern: trimmedPattern,
       }),
     )
 
@@ -76,7 +87,7 @@ export const RedirectsPane = (): JSX.Element => {
           <Right>
             <select
               className="w-full rounded border border-gray-300 bg-white px-3 py-1.5 text-sm text-black focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-neutral-800 dark:text-white"
-              onChange={(e) => setSelectedApp(e.target.value as AppName)}
+              onChange={(e) => setSelectedApp(e.target.value as AppName | '')}
               value={selectedApp}
             >
               <option value="">Select browser...</option>
@@ -121,25 +132,40 @@ export const RedirectsPane = (): JSX.Element => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
-                {rules.map((rule) => (
-                  <tr key={rule.id}>
-                    <td className="max-w-xs truncate px-4 py-2.5 text-xs" style={{ fontFamily: 'monospace' }}>
-                      {rule.pattern}
-                    </td>
-                    <td className="px-4 py-2.5">{rule.appName}</td>
-                    <td className="px-4 py-2.5 text-right">
-                      <button
-                        className="cursor-default text-xs font-medium text-red-600 hover:text-red-500 focus:outline-none dark:text-red-400 dark:hover:text-red-300"
-                        onClick={() =>
-                          dispatch(removedRedirectRule({ id: rule.id }))
-                        }
-                        type="button"
+                {rules.map((rule) => {
+                  const targetApp = apps.find((app) => app.name === rule.appName)
+                  const isInstalled = targetApp?.isInstalled ?? false
+
+                  return (
+                    <tr key={rule.id}>
+                      <td
+                        className="max-w-xs truncate px-4 py-2.5 text-xs"
+                        style={{ fontFamily: 'monospace' }}
                       >
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                        {rule.pattern}
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <span className="align-middle">{rule.appName}</span>
+                        {!isInstalled && (
+                          <span className="ml-2 inline-block rounded border border-red-200 bg-red-100 px-1.5 py-0.5 align-middle text-[10px] font-semibold text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-400">
+                            Not Installed
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-4 py-2.5 text-right">
+                        <button
+                          className="cursor-default text-xs font-medium text-red-600 hover:text-red-500 focus:outline-none dark:text-red-400 dark:hover:text-red-300"
+                          onClick={() =>
+                            dispatch(removedRedirectRule({ id: rule.id }))
+                          }
+                          type="button"
+                        >
+                          Remove
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
