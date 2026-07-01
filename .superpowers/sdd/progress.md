@@ -6,5 +6,6 @@
       review clean)
 - [x] Task 3: URL Wildcard Matching Engine & Unit Tests (commit: 5a89a05, review
       clean)
-- [ ] Task 4: Main Process Routing & Interception
+- [x] Task 4: Main Process Routing & Interception (commit: 8bad4fc, review
+      clean)
 - [ ] Task 5: Auto-Redirect Preferences Pane & UI Integration
