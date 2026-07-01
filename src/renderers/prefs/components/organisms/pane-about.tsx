@@ -18,7 +18,7 @@ export const AboutPane = (): JSX.Element => {
       <div className="text-center">
         <img alt="Logo" className="inline-block w-40" src={icon} />
         <h1 className="mb-2 text-4xl tracking-wider text-gray-900 dark:text-gray-50">
-          Browserosaurus
+          BrowserDirect
         </h1>
         <p className="mb-8 text-xl">The browser prompter for macOS</p>
         <p className="mb-4 opacity-70">Version {version}</p>

@@ -10,6 +10,6 @@ test('should copy string', () => {
   expect(notificationSpy).toHaveBeenCalledWith({
     body: 'URL copied to clipboard',
     silent: true,
-    title: 'Browserosaurus',
+    title: 'BrowserDirect',
   })
 })

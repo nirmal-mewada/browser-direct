@@ -18,7 +18,7 @@ export function createTray(): void {
 
   tray.setPressedImage(path.join(__dirname, '/icon/tray_iconHighlight.png'))
 
-  tray.setToolTip('Browserosaurus')
+  tray.setToolTip('BrowserDirect')
 
   tray.setContextMenu(
     Menu.buildFromTemplate([

@@ -1,7 +1,7 @@
 # Publishing
 
 This document is for the maintainer. If you are contributing to the
-Browserosaurus project, you will not need to follow these steps.
+BrowserDirect project, you will not need to follow these steps.
 
 Setup Keychain for notarization:
 

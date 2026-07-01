@@ -7,11 +7,11 @@
     "Electron",
     "Browser chooser"
   ],
-  "homepage": "https://github.com/local/browser-direct",
+  "homepage": "https://github.com/nirmal-mewada/browser-direct",
   "bugs": {
-    "url": "https://github.com/will-stone/browserosaurus/issues"
+    "url": "https://github.com/nirmal-mewada/browser-direct/issues"
   },
-  "repository": "https://github.com/will-stone/browserosaurus",
+  "repository": "https://github.com/nirmal-mewada/browser-direct",
   "license": "GPL-3.0-only",
   "author": "Will Stone",
   "type": "module",
@@ -32,9 +32,7 @@
     "release": "npm run doctor && bump --commit \"chore: release v\" && npm run make",
     "start": "ELECTRON_DISABLE_SECURITY_WARNINGS=true electron-forge start",
     "test": "jest",
-    "typecheck": "tsc --noEmit --skipLibCheck",
-    "website-css:build": "npx tailwindcss -i node_modules/tailwindcss/tailwind.css -o ./docs/style.css --content docs/index.html -m",
-    "website-css:watch": "npx tailwindcss -i node_modules/tailwindcss/tailwind.css -o ./docs/style.css --content docs/index.html -m --watch"
+    "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
     "file-icon": "^5.1.1"

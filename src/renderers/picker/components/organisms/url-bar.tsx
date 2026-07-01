@@ -35,7 +35,7 @@ const UrlBar: React.FC<Props> = ({ className }) => {
     >
       <div className="grow overflow-hidden text-ellipsis tracking-wider text-black text-opacity-50 dark:text-white dark:text-opacity-50">
         {parsedUrl.hostname?.replace(/^www\./u, '') || (
-          <span className="opacity-30">Browserosaurus</span>
+          <span className="opacity-30">BrowserDirect</span>
         )}
         {parsedUrl.port ? `:${parsedUrl.port}` : null}
       </div>

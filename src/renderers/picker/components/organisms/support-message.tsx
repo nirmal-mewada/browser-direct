@@ -18,7 +18,7 @@ const SupportMessage = (): JSX.Element => {
     >
       <div className="p-4">
         <p>
-          Thank you for downloading Browserosaurus. Please consider supporting
+          Thank you for downloading BrowserDirect. Please consider supporting
           my open source projects.
         </p>
 
