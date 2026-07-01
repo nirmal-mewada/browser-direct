@@ -21,8 +21,7 @@ export const AboutPane = (): JSX.Element => {
           BrowserDirect
         </h1>
         <p className="mb-8 text-xl">The browser prompter for macOS</p>
-        <p className="mb-4 opacity-70">Version {version}</p>
-        <p className="mb-8">Copyright © Will Stone</p>
+        <p className="mb-8 opacity-70">Version {version}</p>
         <div className="space-x-4">
           <Button onClick={() => dispatch(clickedHomepageButton())}>
             Homepage
