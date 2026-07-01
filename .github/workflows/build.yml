@@ -19,3 +19,33 @@ jobs:
       - run: npm run typecheck
       - run: npm run test
       - run: npm run package
+
+  release:
+    needs: build
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    runs-on: macos-14
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.10.x
+          cache: 'npm'
+      - run: npm ci --audit false
+      - name: Build macOS installer
+        run: npm run make
+      - name: Compute release tag
+        id: version
+        run: |
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          echo "tag=v${PKG_VERSION}-${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.tag }}
+          generate_release_notes: true
+          files: out/make/**/*.dmg
