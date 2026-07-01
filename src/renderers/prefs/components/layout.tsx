@@ -6,6 +6,7 @@ import { HeaderBar } from './organisms/header-bar.js'
 import { AboutPane } from './organisms/pane-about.js'
 import { AppsPane } from './organisms/pane-apps.js'
 import { GeneralPane } from './organisms/pane-general.js'
+import { RedirectsPane } from './organisms/pane-redirects.js'
 
 const useAppStarted = () => {
   const dispatch = useDispatch()
@@ -26,6 +27,7 @@ const Layout = (): JSX.Element => {
       <div className="flex grow flex-col overflow-hidden p-8">
         <GeneralPane />
         <AppsPane />
+        <RedirectsPane />
         <AboutPane />
       </div>
     </div>

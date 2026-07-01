@@ -50,6 +50,7 @@ export const HeaderBar = ({ className }: HeaderBarProps): JSX.Element => {
       <div className="flex items-center justify-center space-x-12">
         <TabButton tab="general">General</TabButton>
         <TabButton tab="apps">Apps</TabButton>
+        <TabButton tab="redirects">Redirects</TabButton>
         <TabButton tab="about">About</TabButton>
       </div>
     </div>
