@@ -35,8 +35,20 @@ jobs:
           node-version: 22.10.x
           cache: 'npm'
       - run: npm ci --audit false
-      - name: Build macOS installer
-        run: npm run make
+      - name: Package app
+        run: npm run package
+      - name: Build DMG installers
+        run: |
+          set -euo pipefail
+          PRODUCT_NAME=$(node -p "require('./package.json').productName")
+          mkdir -p out/dmg
+          for ARCH in x64 arm64; do
+            STAGING="$(mktemp -d)/$ARCH"
+            mkdir -p "$STAGING"
+            cp -R "out/$PRODUCT_NAME-darwin-$ARCH/$PRODUCT_NAME.app" "$STAGING/"
+            ln -s /Applications "$STAGING/Applications"
+            hdiutil create -volname "$PRODUCT_NAME" -srcfolder "$STAGING" -ov -format UDZO "out/dmg/$PRODUCT_NAME-$ARCH.dmg"
+          done
       - name: Compute release tag
         id: version
         run: |
@@ -48,4 +60,4 @@ jobs:
           tag_name: ${{ steps.version.outputs.tag }}
           name: ${{ steps.version.outputs.tag }}
           generate_release_notes: true
-          files: out/make/**/*.dmg
+          files: out/dmg/*.dmg

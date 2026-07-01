@@ -1,12 +1,11 @@
 // @ts-check
 
-import { MakerDMG } from '@electron-forge/maker-dmg'
 import { MakerZIP } from '@electron-forge/maker-zip'
 import { VitePlugin } from '@electron-forge/plugin-vite'
 
 /** @type {import('@electron-forge/shared-types').ForgeConfig} */
 const config = {
-  makers: [new MakerZIP({}, ['darwin']), new MakerDMG({}, ['darwin'])],
+  makers: [new MakerZIP({}, ['darwin'])],
   packagerConfig: {
     appBundleId: 'com.browserdirect',
     appCategoryType: 'public.app-category.developer-tools',
