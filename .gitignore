@@ -4,3 +4,6 @@ out
 .env
 .idea
 .vite
+.superpowers/
+docs/superpowers/
+
