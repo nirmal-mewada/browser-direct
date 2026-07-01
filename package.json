@@ -13,7 +13,7 @@
   },
   "repository": "https://github.com/nirmal-mewada/browser-direct",
   "license": "GPL-3.0-only",
-  "author": "Will Stone",
+  "author": "Nirmal Mewada",
   "type": "module",
   "main": ".vite/build/main.js",
   "scripts": {
