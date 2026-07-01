@@ -12,26 +12,36 @@ import {
   clickedMaybeLater,
 } from '../../renderers/picker/state/actions.js'
 import {
+  addedRedirectRule,
   confirmedReset,
+  removedRedirectRule,
   reorderedApp,
   updatedHotCode,
 } from '../../renderers/prefs/state/actions.js'
 
+export type RedirectRule = {
+  appName: AppName
+  id: string
+  pattern: string
+}
+
 type Storage = {
   apps: {
-    name: AppName
     hotCode: string | null
     isInstalled: boolean
+    name: AppName
   }[]
-  supportMessage: number
-  isSetup: boolean
   height: number
+  isSetup: boolean
+  rules: RedirectRule[]
+  supportMessage: number
 }
 
 const defaultStorage: Storage = {
   apps: [],
   height: 200,
   isSetup: false,
+  rules: [],
   supportMessage: 0,
 }
 
@@ -111,6 +121,18 @@ const storage = createReducer<Storage>(defaultStorage, (builder) =>
 
       const [removed] = state.apps.splice(sourceIndex, 1)
       state.apps.splice(destinationIndex, 0, removed)
+    })
+
+    .addCase(addedRedirectRule, (state, action) => {
+      state.rules.push({
+        appName: action.payload.appName,
+        id: Date.now().toString() + Math.random().toString(36).slice(2, 11),
+        pattern: action.payload.pattern,
+      })
+    })
+
+    .addCase(removedRedirectRule, (state, action) => {
+      state.rules = state.rules.filter((rule) => rule.id !== action.payload.id)
     }),
 )
 
