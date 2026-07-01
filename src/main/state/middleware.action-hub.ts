@@ -29,6 +29,7 @@ import copyUrlToClipboard from '../utils/copy-url-to-clipboard.js'
 import { getAppIcons } from '../utils/get-app-icons.js'
 import { getInstalledAppNames } from '../utils/get-installed-app-names.js'
 import { initUpdateChecker } from '../utils/init-update-checker.js'
+import { matchUrl } from '../utils/match-url.js'
 import { openApp } from '../utils/open-app.js'
 // import { removeWindowsFromMemory } from '../utils/remove-windows-from-memory'
 import {
@@ -175,7 +176,13 @@ export const actionHubMiddleware =
 
     // Open URL
     else if (openedUrl.match(action)) {
-      showPickerWindow()
+      const url = action.payload
+      const matchingRule = matchUrl(url, nextState.storage.rules)
+      if (matchingRule) {
+        openApp(matchingRule.appName, url, false, false)
+      } else {
+        showPickerWindow()
+      }
     }
 
     // Tray: restore picker

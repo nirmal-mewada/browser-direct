@@ -5,6 +5,8 @@ import { sleep } from 'tings'
 import { Channel } from '../shared/state/channels.js'
 import { openedUrl, readiedApp } from './state/actions.js'
 import { dispatch, getState } from './state/store.js'
+import { matchUrl } from './utils/match-url.js'
+import { openApp } from './utils/open-app.js'
 
 app.on('ready', () => dispatch(readiedApp()))
 
@@ -13,6 +15,13 @@ app.on('before-quit', () => app.exit())
 
 app.on('open-url', (event, url) => {
   event.preventDefault()
+
+  // Optimize: Check matching rules immediately on startup to avoid window creation overhead
+  const matchingRule = matchUrl(url, getState().storage.rules)
+  if (matchingRule) {
+    openApp(matchingRule.appName, url, false, false)
+    return
+  }
 
   const urlOpener = async () => {
     if (getState().data.pickerStarted) {
