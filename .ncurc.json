@@ -1,0 +1,3 @@
+{
+  "reject": ["lowdb", "@types/node"]
+}

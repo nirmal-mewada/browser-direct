@@ -1,0 +1,22 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "workbench.colorCustomizations": {
+    "titleBar.activeForeground": "#037afa",
+    "titleBar.inactiveForeground": "#117df099"
+  },
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "cSpell.words": [
+    "asar",
+    "fullscreenable",
+    "icns",
+    "maximizable",
+    "minimizable",
+    "Namespacer",
+    "onlyin",
+    "relocator",
+    "timfish"
+  ],
+  "eslint.options": {
+    "overrideConfigFile": "eslint.config.mjs"
+  }
+}
