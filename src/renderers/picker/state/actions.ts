@@ -7,6 +7,8 @@ type OpenAppArguments = {
   appName: AppName | undefined
   isAlt: boolean
   isShift: boolean
+  // Chromium profile directory to open the link in, eg. "Profile 1"
+  profile?: string
 }
 
 const startedPicker = picker('started')

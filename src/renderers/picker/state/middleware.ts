@@ -30,7 +30,7 @@ export const pickerMiddleware =
       clickedDonate.match(action) ||
       clickedMaybeLater.match(action)
     ) {
-      appsRef.current?.[0].focus()
+      appsRef.current?.[0]?.focus()
       appsScrollerRef.current?.scrollTo({ top: 0 })
     }
 

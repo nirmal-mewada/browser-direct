@@ -1,19 +1,17 @@
 import clsx from 'clsx'
 
-import type { InstalledApp } from '../../../shared/state/hooks.js'
-
 type Props = React.ComponentPropsWithoutRef<'img'> & {
-  readonly app: InstalledApp
+  readonly name: string
   readonly className?: string
   readonly icon: string | undefined
 }
 
-const AppLogo = ({ app, className, icon }: Props): JSX.Element => {
+const AppLogo = ({ name, className, icon }: Props): JSX.Element => {
   return (
     <img
       alt=""
       className={clsx(className, 'no-drag', !icon && 'hidden')}
-      data-testid={app.name}
+      data-testid={name}
       src={icon || ''}
     />
   )

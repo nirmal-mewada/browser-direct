@@ -1,7 +1,7 @@
 import type { Rectangle } from 'electron/main'
 
 import type { AppName } from '../../config/apps.js'
-import type { Data } from '../../shared/state/reducer.data.js'
+import type { BrowserProfile, Data } from '../../shared/state/reducer.data.js'
 import type { Storage } from '../../shared/state/reducer.storage.js'
 import { actionNamespacer } from '../../shared/utils/action-namespacer.js'
 
@@ -18,6 +18,10 @@ const changedPickerWindowBounds = main<Rectangle>(
 const startedScanning = main('installed-apps/scanning')
 
 const retrievedInstalledApps = main<AppName[]>('installed-apps/retrieved')
+
+const retrievedBrowserProfiles = main<Partial<Record<AppName, BrowserProfile[]>>>(
+  'browser-profiles/retrieved',
+)
 
 const receivedRendererStartupSignal = main<{ data: Data; storage: Storage }>(
   'sync-reducers',
@@ -48,6 +52,7 @@ export {
   openedUrl,
   readiedApp,
   receivedRendererStartupSignal,
+  retrievedBrowserProfiles,
   retrievedInstalledApps,
   startedScanning,
 }

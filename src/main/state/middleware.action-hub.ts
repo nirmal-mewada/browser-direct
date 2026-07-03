@@ -27,6 +27,7 @@ import { database } from '../database.js'
 import { createTray } from '../tray.js'
 import copyUrlToClipboard from '../utils/copy-url-to-clipboard.js'
 import { getAppIcons } from '../utils/get-app-icons.js'
+import { getBrowserProfiles } from '../utils/get-browser-profiles.js'
 import { getInstalledAppNames } from '../utils/get-installed-app-names.js'
 import { initUpdateChecker } from '../utils/init-update-checker.js'
 import { matchUrl } from '../utils/match-url.js'
@@ -45,6 +46,7 @@ import {
   openedUrl,
   readiedApp,
   receivedRendererStartupSignal,
+  retrievedBrowserProfiles,
   retrievedInstalledApps,
 } from './actions.js'
 
@@ -135,11 +137,15 @@ export const actionHubMiddleware =
 
     // Clicked app
     else if (clickedApp.match(action)) {
-      const { appName, isAlt, isShift } = action.payload
+      const { appName, isAlt, isShift, profile } = action.payload
 
       // Ignore if app's bundle id is missing
       if (appName) {
-        openApp(appName, nextState.data.url, isAlt, isShift)
+        openApp(appName, nextState.data.url, {
+          background: isAlt,
+          privateMode: isShift,
+          profile,
+        })
         pickerWindow?.hide()
       }
     }
@@ -163,12 +169,10 @@ export const actionHubMiddleware =
         )
 
         if (!action.payload.metaKey && foundApp) {
-          openApp(
-            foundApp.name,
-            nextState.data.url,
-            action.payload.altKey,
-            action.payload.shiftKey,
-          )
+          openApp(foundApp.name, nextState.data.url, {
+            background: action.payload.altKey,
+            privateMode: action.payload.shiftKey,
+          })
           pickerWindow?.hide()
         }
       }
@@ -179,7 +183,7 @@ export const actionHubMiddleware =
       const url = action.payload
       const matchingRule = matchUrl(url, nextState.storage.rules)
       if (matchingRule) {
-        openApp(matchingRule.appName, url, false, false)
+        openApp(matchingRule.appName, url, { profile: matchingRule.profile })
       } else {
         showPickerWindow()
       }
@@ -222,9 +226,12 @@ export const actionHubMiddleware =
       }
     }
 
-    // Get app icons
+    // Get app icons and browser profiles
     else if (retrievedInstalledApps.match(action)) {
       getAppIcons(nextState.storage.apps)
+      getBrowserProfiles(action.payload).then((profiles) =>
+        dispatch(retrievedBrowserProfiles(profiles)),
+      )
     }
 
     return result

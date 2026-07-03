@@ -1,5 +1,6 @@
 import type { AppName } from '../../../config/apps.js'
 import type { PrefsTab } from '../../../shared/state/reducer.data.js'
+import type { RedirectRule } from '../../../shared/state/reducer.storage.js'
 import { actionNamespacer } from '../../../shared/utils/action-namespacer.js'
 
 const prefs = actionNamespacer('prefs')
@@ -28,9 +29,7 @@ const reorderedApp = prefs<{ sourceName: AppName; destinationName: AppName }>(
 const clickedHomepageButton = prefs('homepage-button/clicked')
 const clickedOpenIssueButton = prefs('open-issue-button/clicked')
 
-const addedRedirectRule = prefs<{ appName: AppName; id: string; pattern: string }>(
-  'redirects/added',
-)
+const addedRedirectRule = prefs<RedirectRule>('redirects/added')
 const removedRedirectRule = prefs<{ id: string }>('redirects/removed')
 
 export {

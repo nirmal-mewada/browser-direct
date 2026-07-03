@@ -19,7 +19,7 @@ app.on('open-url', (event, url) => {
   // Optimize: Check matching rules immediately on startup to avoid window creation overhead
   const matchingRule = matchUrl(url, getState().storage.rules)
   if (matchingRule) {
-    openApp(matchingRule.appName, url, false, false)
+    openApp(matchingRule.appName, url, { profile: matchingRule.profile })
     return
   }
 

@@ -1,6 +1,13 @@
 type App = {
   privateArg?: string
   convertUrl?: (url: string) => string
+  /**
+   * For Chromium-based browsers that support multiple user profiles:
+   * path of the browser's user-data directory, relative to
+   * `~/Library/Application Support`. The directory is expected to contain a
+   * "Local State" JSON file listing the profiles (`profile.info_cache`).
+   */
+  profilesDirPath?: string
 }
 
 const typeApps = <T extends Record<string, App>>(apps: T) => apps
@@ -11,18 +18,22 @@ const apps = typeApps({
   Blisk: {},
   'Brave Browser': {
     privateArg: '--incognito',
+    profilesDirPath: 'BraveSoftware/Brave-Browser',
   },
   'Brave Browser Beta': {
     privateArg: '--incognito',
+    profilesDirPath: 'BraveSoftware/Brave-Browser-Beta',
   },
   'Brave Browser Nightly': {
     privateArg: '--incognito',
+    profilesDirPath: 'BraveSoftware/Brave-Browser-Nightly',
   },
   'Brave Dev': {
     privateArg: '--incognito',
   },
   Chromium: {
     privateArg: '--incognito',
+    profilesDirPath: 'Chromium',
   },
   'Chromium-Gost': {
     privateArg: '--incognito',
@@ -70,15 +81,19 @@ const apps = typeApps({
   FreeTube: {},
   'Google Chrome': {
     privateArg: '--incognito',
+    profilesDirPath: 'Google/Chrome',
   },
   'Google Chrome Beta': {
     privateArg: '--incognito',
+    profilesDirPath: 'Google/Chrome Beta',
   },
   'Google Chrome Canary': {
     privateArg: '--incognito',
+    profilesDirPath: 'Google/Chrome Canary',
   },
   'Google Chrome Dev': {
     privateArg: '--incognito',
+    profilesDirPath: 'Google/Chrome Dev',
   },
   IceCat: {
     privateArg: '--private-window',
@@ -93,15 +108,19 @@ const apps = typeApps({
   Maxthon: {},
   'Microsoft Edge': {
     privateArg: '--inprivate',
+    profilesDirPath: 'Microsoft Edge',
   },
   'Microsoft Edge Beta': {
     privateArg: '--inprivate',
+    profilesDirPath: 'Microsoft Edge Beta',
   },
   'Microsoft Edge Canary': {
     privateArg: '--inprivate',
+    profilesDirPath: 'Microsoft Edge Canary',
   },
   'Microsoft Edge Dev': {
     privateArg: '--inprivate',
+    profilesDirPath: 'Microsoft Edge Dev',
   },
   'Microsoft Teams': {
     convertUrl: (url) =>
@@ -160,8 +179,12 @@ const apps = typeApps({
   Ulaa: {
     privateArg: '--incognito',
   },
-  Vivaldi: {},
-  'Vivaldi Snapshot': {},
+  Vivaldi: {
+    profilesDirPath: 'Vivaldi',
+  },
+  'Vivaldi Snapshot': {
+    profilesDirPath: 'Vivaldi Snapshot',
+  },
   Waterfox: {},
   Wavebox: {
     privateArg: '--incognito',

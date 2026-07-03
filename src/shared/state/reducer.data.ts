@@ -10,6 +10,7 @@ import {
   gotDefaultBrowserStatus,
   openedUrl,
   receivedRendererStartupSignal,
+  retrievedBrowserProfiles,
   retrievedInstalledApps,
   startedScanning,
 } from '../../main/state/actions.js'
@@ -27,6 +28,13 @@ import { gotKeyLayoutMap } from '../../renderers/shared/state/actions.js'
 
 type PrefsTab = 'about' | 'apps' | 'general' | 'redirects'
 
+type BrowserProfile = {
+  // The profile directory inside the browser's user-data dir, eg. "Profile 1"
+  directory: string
+  // The user-facing profile name, eg. "Work"
+  name: string
+}
+
 type Data = {
   version: string
   updateStatus: 'available' | 'downloaded' | 'downloading' | 'no-update'
@@ -39,6 +47,7 @@ type Data = {
   scanStatus: 'init' | 'scanned' | 'scanning'
   icons: Partial<Record<AppName, string>>
   activeAppIndex: number
+  profiles: Partial<Record<AppName, BrowserProfile[]>>
 }
 
 const defaultData: Data = {
@@ -49,6 +58,7 @@ const defaultData: Data = {
   pickerStarted: false,
   prefsStarted: false,
   prefsTab: 'general',
+  profiles: {},
   scanStatus: 'init',
   updateStatus: 'no-update',
   url: '',
@@ -67,6 +77,10 @@ const data = createReducer<Data>(defaultData, (builder) =>
 
     .addCase(retrievedInstalledApps, (state) => {
       state.scanStatus = 'scanned'
+    })
+
+    .addCase(retrievedBrowserProfiles, (state, action) => {
+      state.profiles = action.payload
     })
 
     .addCase(startedPicker, (state) => {
@@ -118,4 +132,4 @@ const data = createReducer<Data>(defaultData, (builder) =>
     }),
 )
 
-export { Data, data, defaultData, PrefsTab }
+export { BrowserProfile, Data, data, defaultData, PrefsTab }
