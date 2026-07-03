@@ -23,6 +23,8 @@ export type RedirectRule = {
   appName: AppName
   id: string
   pattern: string
+  // Chromium profile directory to open the link in, eg. "Profile 1"
+  profile?: string
 }
 
 type Storage = {
@@ -124,11 +126,7 @@ const storage = createReducer<Storage>(defaultStorage, (builder) =>
     })
 
     .addCase(addedRedirectRule, (state, action) => {
-      state.rules.push({
-        appName: action.payload.appName,
-        id: action.payload.id,
-        pattern: action.payload.pattern,
-      })
+      state.rules.push(action.payload)
     })
 
     .addCase(removedRedirectRule, (state, action) => {

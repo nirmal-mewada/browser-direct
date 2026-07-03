@@ -23,16 +23,29 @@ const Right = ({ children }: RowProps): JSX.Element => (
   <div className="col-span-7 flex flex-col">{children}</div>
 )
 
+const fieldClassName =
+  'w-full rounded border border-gray-300 bg-white px-3 py-1.5 text-sm text-black focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-neutral-800 dark:text-white'
+
 export const RedirectsPane = (): JSX.Element => {
   const dispatch = useDispatch()
   const rules = useSelector((state) => state.storage.rules)
   const apps = useSelector((state) => state.storage.apps)
+  const profiles = useSelector((state) => state.data.profiles)
 
   // Filter only installed apps
   const installedApps = apps.filter((app) => app.isInstalled)
 
   const [pattern, setPattern] = useState('')
   const [selectedApp, setSelectedApp] = useState<AppName | ''>('')
+  const [selectedProfile, setSelectedProfile] = useState('')
+
+  // Profiles of the currently selected target browser (empty for browsers
+  // without multi-profile support)
+  const selectedAppProfiles = (selectedApp && profiles[selectedApp]) || []
+
+  const getProfileName = (appName: AppName, directory: string): string =>
+    profiles[appName]?.find((profile) => profile.directory === directory)
+      ?.name ?? directory
 
   const handleAddRule = (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,10 +69,12 @@ export const RedirectsPane = (): JSX.Element => {
         appName: selectedApp,
         id: Date.now().toString() + Math.random().toString(36).slice(2, 11),
         pattern: trimmedPattern,
+        profile: selectedProfile || undefined,
       }),
     )
 
     setPattern('')
+    setSelectedProfile('')
   }
 
   return (
@@ -69,7 +84,7 @@ export const RedirectsPane = (): JSX.Element => {
           <Left>Routing Pattern:</Left>
           <Right>
             <input
-              className="w-full rounded border border-gray-300 bg-white px-3 py-1.5 text-sm text-black focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-neutral-800 dark:text-white"
+              className={fieldClassName}
               onChange={(e) => setPattern(e.target.value)}
               placeholder="e.g. *github.com* or localhost:*"
               type="text"
@@ -86,8 +101,11 @@ export const RedirectsPane = (): JSX.Element => {
           <Left>Target Browser:</Left>
           <Right>
             <select
-              className="w-full rounded border border-gray-300 bg-white px-3 py-1.5 text-sm text-black focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-neutral-800 dark:text-white"
-              onChange={(e) => setSelectedApp(e.target.value as AppName | '')}
+              className={fieldClassName}
+              onChange={(e) => {
+                setSelectedApp(e.target.value as AppName | '')
+                setSelectedProfile('')
+              }}
               value={selectedApp}
             >
               <option value="">Select browser...</option>
@@ -99,6 +117,29 @@ export const RedirectsPane = (): JSX.Element => {
             </select>
           </Right>
         </Row>
+
+        {selectedAppProfiles.length > 0 && (
+          <Row>
+            <Left>Browser Profile:</Left>
+            <Right>
+              <select
+                className={fieldClassName}
+                onChange={(e) => setSelectedProfile(e.target.value)}
+                value={selectedProfile}
+              >
+                <option value="">Default (last used)</option>
+                {selectedAppProfiles.map((profile) => (
+                  <option key={profile.directory} value={profile.directory}>
+                    {profile.name}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-1.5 text-xs opacity-75">
+                Open matching links in a specific browser profile.
+              </p>
+            </Right>
+          </Row>
+        )}
 
         <Row>
           <Left />
@@ -145,7 +186,15 @@ export const RedirectsPane = (): JSX.Element => {
                         {rule.pattern}
                       </td>
                       <td className="px-4 py-2.5">
-                        <span className="align-middle">{rule.appName}</span>
+                        <span className="align-middle">
+                          {rule.appName}
+                          {rule.profile ? (
+                            <span className="opacity-60">
+                              {' — '}
+                              {getProfileName(rule.appName, rule.profile)}
+                            </span>
+                          ) : null}
+                        </span>
                         {!isInstalled && (
                           <span className="ml-2 inline-block rounded border border-red-200 bg-red-100 px-1.5 py-0.5 align-middle text-[10px] font-semibold text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-400">
                             Not Installed
